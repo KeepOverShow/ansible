@@ -1,0 +1,14 @@
+# common variables
+package_path: '/home/hadoop/ansible/files/'
+
+hadoop_path: 'hadoop/'
+hadoop_package_name: 'hadoop-2.7.3.tar.gz'
+
+spark_path: 'spark/'
+spark_package_name: 'spark-2.3.0-bin-hadoop2.6.tgz'
+
+scala_path: 'scala/'
+scala_package_name: 'scala-2.11.8.tgz'
+
+zookeeper_path: 'zookeeper/'
+zookeeper_package_name: 'zookeeper-3.4.6.tar.gz'

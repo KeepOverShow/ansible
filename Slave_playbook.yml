@@ -1,0 +1,12 @@
+---
+- hosts: Hadoop_slave_servers
+  remote_user: hadoop
+  roles:
+#  - common
+  - slave_hadoop
+
+#- hosts: Hadoop_SecondaryNamenode_servers
+#  remote_user: hadoop
+#  roles:
+#  - common
+#  - hadoop_secondaryNamenode

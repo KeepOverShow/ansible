@@ -1,0 +1,54 @@
+---
+- name: Copy tar.gz to spark node
+  copy:
+    src: "{{ package_path }}{{ spark_path }}{{ spark_package_name }}"
+    dest: "{{ package_path }}{{ spark_path }}"
+    mode: 0644
+
+- name: Copy tar.gz to spark node
+  copy:
+    src: "{{ package_path }}{{ scala_path }}{{ scala_package_name }}"
+    dest: /home/hadoop
+    mode: 0644
+
+- name: Unarchive spark.tar.gz to r node
+  unarchive:
+      remote_src: yes
+      src: "{{ package_path }}{{ spark_path}}{{ spark_package_name}}"
+      dest: /home/hadoop
+
+- name: Unarchive scala.tgz to slaves
+  unarchive:
+    src: /home/hadoop/scala-2.11.8.tgz
+    dest: /home/hadoop
+
+#- name: Modify the environment variable
+#  lineinfile:
+#    path: /etc/profile
+#    line: export PATH="$PATH:/home/hadoop/scala-2.11.8/bin" 
+#    insertafter: EOF
+
+#- name: Source /etc/profile
+#  shell: source /etc/profile
+
+- name: Rename spark dir
+  shell: mv /home/hadoop/spark-2.3.0-bin-hadoop2.6 /home/hadoop/SPARK_HOME
+  
+- name: Template spark-env.sh to slaves
+  template:
+    src: spark-env.sh.j2
+    dest: /home/hadoop/SPARK_HOME/conf/spark-env.sh
+    mode: 0755
+
+- name: Template spark-defaults.conf to slaves
+  template:
+    src: spark-defaults.conf.j2
+    dest: /home/hadoop/SPARK_HOME/conf/spark-defaults.conf
+    mode: 0755
+
+- name: Template slaves
+  template:
+    src: slaves.j2
+    dest: /home/hadoop/SPARK_HOME/conf/slaves
+    mode: 0755
+

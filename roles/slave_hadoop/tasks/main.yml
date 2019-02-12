@@ -1,0 +1,81 @@
+---
+#- name: Copy tar.gz to Slave node
+#  copy:
+#    src: "{{ package_path }}{{ hadoop_path }}{{ hadoop_package_name }}"
+#    dest: "{{ package_path }}{{ hadoop_path }}" 
+#    mode: 0644
+#
+#- name: SLAVES Unarchive hadoop.tar.gz to Slave node
+#  unarchive:
+#      remote_src: yes
+#      src: "{{ package_path }}{{ hadoop_path }}{{ hadoop_package_name }}"
+#      dest: /home/hadoop
+#
+#- name: SLAVES Rename hadoop dir
+#  shell: mv /home/hadoop/hadoop-2.7.3 /home/hadoop/HADOOP_HOME
+#  
+#- name: SLAVES Make related dir
+#  file:
+#    path: "{{ item }}"
+#    state: directory    
+#    mode: 0755
+#  with_items:
+#    - /home/hadoop/tmp
+#    - /home/hadoop/data/hdfs/namenode
+#    - /home/hadoop/data//hdfs/data
+#    - /home/hadoop/var/run/hadoop
+#    - /home/hadoop/var/log/hadoop
+#    - /home/hadoop/data/yarn/local
+#    - /home/hadoop/data/yarn/log
+#    - /home/hadoop/mr-history/tmp
+#    - /home/hadoop/mr-history/done
+#
+- name: SLAVES Delete core-site.xml,hdfs-site.xml,mapred-site.xml,yarn-site.xml
+  file:
+    path: "{{ item }}"
+    state: absent    
+    mode: 0755
+  with_items:
+#    - /home/hadoop/HADOOP_HOME/etc/hadoop/core-site.xml
+#    - /home/hadoop/HADOOP_HOME/etc/hadoop/hdfs-site.xml
+#    - /home/hadoop/HADOOP_HOME/etc/hadoop/mapred-site.xml
+    - /home/hadoop/HADOOP_HOME/etc/hadoop/yarn-site.xml   
+#    - /home/hadoop/HADOOP_HOME/etc/hadoop/slaves
+#    - /home/hadoop/HADOOP_HOME/etc/hadoop/hadoop-env.sh
+#
+#- name: Template new core-site.xml files to slaves
+#  template:
+#    src: core-site-slave.xml.j2
+#    dest: /home/hadoop/HADOOP_HOME/etc/hadoop/core-site.xml
+#    mode: 0644
+#
+#- name: Template new hdfs-site.xml files to slaves
+#  template:
+#    src: hdfs-site-slave.xml.j2
+#    dest: /home/hadoop/HADOOP_HOME/etc/hadoop/hdfs-site.xml
+#    mode: 0644
+#
+#- name: Template new mapred-site.xml files to slaves
+#  template:
+#    src: mapred-site-slave.xml.j2
+#    dest: /home/hadoop/HADOOP_HOME/etc/hadoop/mapred-site.xml
+#    mode: 0644
+#
+- name: Template new yarn-site.xml files to slaves
+  template:
+    src: yarn-site-slave.xml.j2
+    dest: /home/hadoop/HADOOP_HOME/etc/hadoop/yarn-site.xml
+    mode: 0644
+
+#- name: Template new Slaves files to slaves
+#  template:
+#    src: slaves.j2
+#    dest: /home/hadoop/HADOOP_HOME/etc/hadoop/slaves
+#    mode: 0644
+#
+#- name: Template new hadoop_env.sh to slaves
+#  template:
+#    src: hadoop-env.sh.j2
+#    dest: /home/hadoop/HADOOP_HOME/etc/hadoop/hadoop-env.sh
+#    mode: 0644
+#

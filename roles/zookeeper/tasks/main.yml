@@ -1,0 +1,43 @@
+---
+- name: Copy tar.gz to zk node
+  copy:
+    src: "{{ package_path }}{{ zookeeper_path}}{{ zookeeper_package_name}}" 
+    dest: /home/hadoop 
+    mode: 0644
+
+- name: Unarchive tar.gz to zk node
+  unarchive:
+    remote_src: yes
+    src: /home/hadoop/{{ zookeeper_package_name}}
+    dest: /home/hadoop
+
+- name: Rename hadoop dir
+  shell: mv /home/hadoop/zookeeper-3.4.6 /home/hadoop/zookeeper
+
+- name: Make related dir
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+  with_items:
+    - /home/hadoop/zookeeper/zkdata
+    - /home/hadoop/zookeeper/zkdatalog
+
+- name: Delete cfg files
+  file:
+    path: "{{ item }}"
+    state: absent
+    mode: 755
+  with_items:
+    - /home/hadoop/zookeeper/conf/zoo_sample.cfg
+
+- name: Template new cfg files to masters
+  template:
+    src: zoo_sample.cfg.j2
+    dest: /home/hadoop/zookeeper/conf/zoo.cfg
+    mode: 0644
+
+- name:  Execute /home/hadoop/ansible/myid.sh
+  shell: sh myid.sh
+  args:
+    chdir: /home/hadoop/ansible

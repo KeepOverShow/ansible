@@ -1,0 +1,5 @@
+---
+- hosts: Zookeeper_servers
+  remote_user: hadoop
+  roles:
+  - zookeeper 

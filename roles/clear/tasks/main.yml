@@ -1,0 +1,14 @@
+---
+- name: Delete related dir
+  file:
+    dest: "{{ item }}"
+    state: absent
+  with_items:
+#    - /home/hadoop/tmp
+#    - /home/hadoop/data/
+#    - /home/hadoop/var
+#    - /home/hadoop/mr-history
+#    - /home/hadoop/SPARK_HOME
+#    - /home/hadoop/HADOOP_HOME
+#    - /home/hadoop/scala-2.11.8
+    - /home/hadoop/zookeeper
