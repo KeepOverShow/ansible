@@ -1,0 +1,99 @@
+---
+- name: Create postgres group
+  group:
+    name: postgres 
+    state: present
+
+- name: Create postgres user
+  user:
+    name: postgres
+    group: postgres
+
+- name: make related dirs
+  become_method: sudo
+  file:
+    path: /home/postgresql_data 
+    state: directory    
+    mode: 0755
+    owner: postgres
+    group: postgres
+
+- name:  Install postgresql 
+  become_method: sudo
+  shell: yum localinstall /home/hadoop/pgdg-centos96-9.6-3.noarch.rpm -y
+ 
+- name: install postgresql-server postgreslq96-contrib
+  become_method: sudo
+  yum:
+    name:
+      - postgresql-server
+      - postgresql-contrib
+
+#- name: Template /etc/profile to masters
+#  template:
+#    src: profile.j2
+#    dest: /etc/profile
+#    mode: 0644
+#    owner: root
+#    group: root
+
+#- name: source /etc/profile
+#  shell: source /etc/profile
+
+- name: Template init_database.sh to masters
+  template:  
+    src: init_database.sh.j2 
+    dest: /home/init_database.sh
+    mode: 0777
+    owner: postgres
+    group: postgres
+
+- name:  Init postgresql
+  become_user: postgres
+  shell: sh init_database.sh 
+  args:
+    chdir: /home
+
+- name: chown /var/lib/pgsql
+  become_method: sudo
+  file:
+    path: /var/lib/pgsql
+    owner: postgres
+    group: postgres
+
+- name: Delete pg_hba.conf,postgresql.conf 
+  become_method: sudo
+  file:
+    path: "{{ item }}"
+    state: absent
+    mode: 755
+  with_items:
+    - /home/postgresql_data/pg_hba.conf
+    - /home/postgresql_data/postgresql.conf
+    - /etc/init.d/postgresql-9.6
+
+- name: Template new pg_hba.conf files to masters
+  template:
+    src: pg_hba.conf.j2
+    dest: /home/postgresql_data/pg_hba.conf
+    mode: 0644
+    owner: postgres 
+    group: postgres 
+
+
+- name: Template new postgresql.conf files to masters
+  template:
+    src: postgresql.conf.j2
+    dest: /home/postgresql_data/postgresql.conf
+    mode: 0644
+    owner: postgres 
+    group: postgres 
+
+- name: Template new postgresql-9.6 files to masters
+  become_method: sudo
+  template:
+    src: postgresql-9.6.j2
+    dest: /etc/init.d/postgresql-9.6
+    mode: 0755
+    owner: root
+    group: root

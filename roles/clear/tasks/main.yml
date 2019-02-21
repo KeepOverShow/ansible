@@ -1,4 +1,13 @@
 ---
+- name: rm postgresql
+  become_method: sudo
+  yum: 
+    name:
+      - postgresql
+      - postgresql-server
+      - postgresql-contrib
+    state: removed
+
 - name: Delete related dir
   file:
     dest: "{{ item }}"
@@ -11,4 +20,5 @@
 #    - /home/hadoop/SPARK_HOME
 #    - /home/hadoop/HADOOP_HOME
 #    - /home/hadoop/scala-2.11.8
-    - /home/hadoop/zookeeper
+#    - /home/hadoop/zookeeper
+    - /home/postgresql_data

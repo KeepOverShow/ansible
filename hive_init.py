@@ -20,14 +20,14 @@ def run(cmd,ignore_error=False):
 #    run("cat /dev/zero | ssh-keygen -q -N ''")
 #    for i in hosts:
 #        run("ssh-copy-id -i /root/.ssh/id_rsa root@" + i)
-def clear(order):
+def install(order):
     if order == "yes":
-        run("ansible-playbook -i hosts -s clear_playbook.yml -vv")
+        run("ansible-playbook -i hosts -s hive_playbook.yml -vv")
     else:
         pass
 
 if __name__ == "__main__":
-    print "Delete old Directory?(yes or not)"
+    print "Install hive?(yes or not)"
     ord = raw_input()
-    clear(ord)
+    install(ord)
 

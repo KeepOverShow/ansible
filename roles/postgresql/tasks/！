@@ -1,0 +1,7 @@
+---
+- name: Install postgresql 
+  copy:
+    src: "{{ package_path }}{{ spark_path }}{{ spark_package_name }}"
+    dest: "{{ package_path }}{{ spark_path }}"
+    mode: 0644
+
